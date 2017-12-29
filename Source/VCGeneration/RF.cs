@@ -569,9 +569,11 @@ namespace RefinementFuzzing
 				Console.WriteLine(x);
 			}
 		}
-
-		// Set it here to increase the verbosity from Z3
-		public static int ProverVerbosity = 0;
+        
+        public static int debugCounter = 0;
+        
+        // Set it here to increase the verbosity from Z3
+        public static int ProverVerbosity = 0;
 
 		// Set it here for ReadKey after each partition is retrieved
 		public static bool PausedExecution { get { return false; } }
@@ -937,5 +939,5 @@ namespace RefinementFuzzing
 		// If some other thread updates the summary while this current thread was computing the summary,
 		// do not update the new summary as the summary from the other thread may be enough
 		public static bool handleSummaryUpdateConflicts = true;
-	}
+    }
 }

@@ -5145,8 +5145,6 @@ namespace VC {
           
           prover.Close();
 
-
-
           //Console.WriteLine("Answer = {0}", outcome);
 
           return ProverInterfaceOutcomeToConditionGenerationOutcome(outcome);
