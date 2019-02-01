@@ -410,6 +410,9 @@ namespace Microsoft.Boogie {
 
   public abstract class ProverInterface {
 
+    public int id = -1;
+    public int owner = 0;
+
     public static ProverInterface CreateProver(Program prog, string/*?*/ logFilePath, bool appendLogFile, int timeout, int taskID = -1) {
       Contract.Requires(prog != null);
 
@@ -530,7 +533,7 @@ namespace Microsoft.Boogie {
         throw new System.NotImplementedException();
     }
     [NoDefaultContract]
-    public abstract Outcome CheckOutcome(ErrorHandler handler, int taskID = -1);
+    public abstract Outcome CheckOutcome(ErrorHandler handler, int taskID = -1, int owner = 0);
     public virtual string[] CalculatePath(int controlFlowConstant) {
       throw new System.NotImplementedException();
     }
@@ -571,7 +574,7 @@ namespace Microsoft.Boogie {
     }
 
     // (assert vc)
-    public virtual void Assert(VCExpr vc, bool polarity, bool isSoft = false, int weight = 1)
+    public virtual void Assert(VCExpr vc, bool polarity, bool isSoft = false, int weight = 1, int owner = 0)
     {
         throw new NotImplementedException();
     }
@@ -598,7 +601,7 @@ namespace Microsoft.Boogie {
       throw new NotImplementedException();
     }
 
-    public virtual Outcome CheckOutcomeCore(ErrorHandler handler, int taskID = -1)
+    public virtual Outcome CheckOutcomeCore(ErrorHandler handler, int taskID = -1, int owner = 0)
     {
         throw new NotImplementedException();
     }
@@ -686,7 +689,7 @@ namespace Microsoft.Boogie {
       throw new NotImplementedException();
     }
     [NoDefaultContract]
-    public override Outcome CheckOutcome(ErrorHandler handler, int taskID = -1) {
+    public override Outcome CheckOutcome(ErrorHandler handler, int taskID = -1, int owner= 0 ) {
       //Contract.Requires(handler != null);
       Contract.EnsuresOnThrow<UnexpectedProverOutputException>(true);
       throw new NotImplementedException();

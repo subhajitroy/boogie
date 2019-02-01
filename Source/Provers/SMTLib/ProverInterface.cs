@@ -1278,11 +1278,13 @@ namespace Microsoft.Boogie.SMTLib
     }
 
     [NoDefaultContract]
-    public override Outcome CheckOutcome(ErrorHandler handler, int taskID = -1)
+    public override Outcome CheckOutcome(ErrorHandler handler, int taskID = -1, int owner = 0)
     {
       Contract.EnsuresOnThrow<UnexpectedProverOutputException>(true);
 
-      var result = CheckOutcomeCore(handler, taskID: taskID);
+      Contract.Assert(owner == this.owner);
+
+     var result = CheckOutcomeCore(handler, taskID: taskID, owner:owner);
       SendThisVC("(pop 1)");
       FlushLogFile();
 
@@ -1290,9 +1292,11 @@ namespace Microsoft.Boogie.SMTLib
     }
 
     [NoDefaultContract]
-    public override Outcome CheckOutcomeCore(ErrorHandler handler, int taskID = -1)
+    public override Outcome CheckOutcomeCore(ErrorHandler handler, int taskID = -1, int owner = 0)
     {  
       Contract.EnsuresOnThrow<UnexpectedProverOutputException>(true);
+
+      Contract.Assert(owner == this.owner);
       
       var result = Outcome.Undetermined;
 
@@ -2220,8 +2224,9 @@ namespace Microsoft.Boogie.SMTLib
         throw new NotImplementedException();
     }
 
-    public override void Assert(VCExpr vc, bool polarity, bool isSoft = false, int weight = 1)
+    public override void Assert(VCExpr vc, bool polarity, bool isSoft = false, int weight = 1, int owner = 0)
     {
+        Contract.Assert(owner == this.owner);
         OptimizationRequests.Clear();
         string assert = "assert";
         if (options.Solver == SolverKind.Z3 && isSoft) {
@@ -2517,7 +2522,12 @@ namespace Microsoft.Boogie.SMTLib
       Pop();
       return outcome;
     }
-  }
+
+        public static implicit operator int(SMTLibProcessTheoremProver v)
+        {
+            throw new NotImplementedException();
+        }
+    }
 
   public class SMTLibInterpolatingProcessTheoremProver : SMTLibProcessTheoremProver
   {

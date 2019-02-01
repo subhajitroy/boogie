@@ -307,7 +307,7 @@ namespace VC
 
 		public void ReturnProver(ProverStackBookkeeping prover, int ownerId, bool docheck = true)
 		{
-			lock (this)
+			lock (RefinementFuzzing.Settings.lockThis)
 			{
 				int i = proverDict[prover];
 				proverAvailable[i] = true;
@@ -337,7 +337,7 @@ namespace VC
 
 		public ProverStackBookkeeping BorrowProver(int ownerId)
 		{
-			lock (this)
+			lock (RefinementFuzzing.Settings.lockThis)
 			{
 				// Try to search for a prover which had the same owner
 				for (int i = 0; i < numProvers; i++)
@@ -385,7 +385,7 @@ namespace VC
 
 		public void RequestProver(ProverStackBookkeeping proverStackBookkeeping, int ownerId)
 		{
-			lock (this)
+			lock (RefinementFuzzing.Settings.lockThis)
 			{
 				int i = proverDict[proverStackBookkeeping];
 				Contract.Assert(proverAvailable[i]);
@@ -399,7 +399,7 @@ namespace VC
 		{
 			int available = 0;
 
-			lock (this)
+			lock (RefinementFuzzing.Settings.lockThis)
 			{
 				proverAvailable.Iter<bool>(n => { if (n) available++; });
 			}
@@ -411,7 +411,7 @@ namespace VC
 		{
 			int available = 0;
 
-			lock (this)
+			lock (RefinementFuzzing.Settings.lockThis)
 			{
 				proverAvailable.Iter<bool>(n => { if (n) available++; });
 			}
@@ -1007,7 +1007,7 @@ namespace VC
 
 						// partition 's'
 
-						lock (s)
+						lock (RefinementFuzzing.Settings.lockThis)
 						{
 							RefinementFuzzing.Settings.WritePrimaryLog(workElem.Item2.id, s.Id, "Solve1", "Attempting to enter critical section for softpartition: " + s.Id);
 							outcome = vcgen.SolvePartition(s, vState, out partitions, out solTime, workElem.Item2, CexList, numProvers + 1); //available + the current prover

@@ -35,6 +35,14 @@ namespace VC {
     Dictionary<Block, VCExprVar> mustReachVar;
     List<VCExprLetBinding> mustReachBindings;
 
+
+    public StratifiedVC(StratifiedVC parentStratifiedVC)
+    {
+            // TODO
+            Contract.Assert(false);
+    }
+
+
     public StratifiedVC(StratifiedInliningInfo siInfo, HashSet<string> procCalls) {
       info = siInfo;
       info.GenerateVC();
