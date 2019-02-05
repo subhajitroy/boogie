@@ -574,7 +574,12 @@ namespace Microsoft.Boogie {
     }
 
     // (assert vc)
-    public virtual void Assert(VCExpr vc, bool polarity, bool isSoft = false, int weight = 1, int owner = 0)
+    public virtual void Assert(VCExpr vc, bool polarity, bool isSoft = false, int weight = 1, int owner = 0, string name = null)
+    {
+        throw new NotImplementedException();
+    }
+    
+    public virtual List<string> UnsatCore()
     {
         throw new NotImplementedException();
     }

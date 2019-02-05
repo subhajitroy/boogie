@@ -2224,7 +2224,7 @@ namespace Microsoft.Boogie.SMTLib
         throw new NotImplementedException();
     }
 
-    public override void Assert(VCExpr vc, bool polarity, bool isSoft = false, int weight = 1, int owner = 0)
+    public override void Assert(VCExpr vc, bool polarity, bool isSoft = false, int weight = 1, int owner = 0, string name = null)
     {
         Contract.Assert(owner == this.owner);
         OptimizationRequests.Clear();
@@ -2236,9 +2236,25 @@ namespace Microsoft.Boogie.SMTLib
         if (options.Solver == SolverKind.Z3 && isSoft) {
             expr += " :weight " + weight;
         }
+        if (name != null)
+        {
+            expr = "(! " + expr + ":named " + name + ")";
+        }
         AssertAxioms();
         SendThisVC("(" + assert + " " + expr + ")");
         SendOptimizationRequests();
+    }
+
+    public override List<string> UnsatCore()
+    {
+        SendThisVC("(get-unsat-core)");
+        var resp = Process.GetProverResponse().ToString();
+        if (resp == "" || resp == "()")
+            return null;
+        if (resp[0] == '(')
+            resp = resp.Substring(1, resp.Length - 2);
+        var ucore = resp.Split(' ').ToList();
+        return ucore;
     }
 
     public override void DefineMacro(Macro f, VCExpr vc) {
