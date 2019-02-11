@@ -38,9 +38,55 @@ namespace VC {
 
     public StratifiedVC(StratifiedVC parentStratifiedVC)
     {
+            id = parentStratifiedVC.id;
+            interfaceExprVars = new List<VCExprVar>();
+            foreach (VCExprVar v in parentStratifiedVC.interfaceExprVars)
+            {
+                interfaceExprVars.Add(v);
+            }
+            blockToControlVar = new Dictionary<Block, VCExpr>();
+            foreach (Block b in parentStratifiedVC.blockToControlVar.Keys)
+            {
+                blockToControlVar.Add(b, parentStratifiedVC.blockToControlVar[b]);
+            }
+            block2label = new Dictionary<Absy, string>();
+            foreach (Absy a in parentStratifiedVC.block2label.Keys)
+            {
+                block2label.Add(a, parentStratifiedVC.block2label[a]);
+            }
+            callSites = new Dictionary<Block, List<StratifiedCallSite>>();
+            foreach (Block b in parentStratifiedVC.callSites.Keys)
+            {
+                callSites.Add(b, new List<StratifiedCallSite>());
+                foreach (StratifiedCallSite s in parentStratifiedVC.callSites[b])
+                {
+                    callSites[b].Add(s);
+                }
+            }
+            recordProcCallSites = new Dictionary<Block, List<StratifiedCallSite>>();
+            foreach (Block b in parentStratifiedVC.recordProcCallSites.Keys)
+            {
+                recordProcCallSites.Add(b, new List<StratifiedCallSite>());
+                foreach (StratifiedCallSite s in parentStratifiedVC.recordProcCallSites[b])
+                {
+                    recordProcCallSites[b].Add(s);
+                }
+            }
+            vcexpr = parentStratifiedVC.vcexpr;
+            mustReachVar = new Dictionary<Block, VCExprVar>();
+            foreach (Block b in parentStratifiedVC.mustReachVar.Keys)
+            {
+                mustReachVar.Add(b, parentStratifiedVC.mustReachVar[b]);
+            }
+            mustReachBindings = new List<VCExprLetBinding>();
+            foreach (VCExprLetBinding v in parentStratifiedVC.mustReachBindings)
+            {
+                mustReachBindings.Add(v);
+            }
+            info = parentStratifiedVC.info;
             // TODO
-            Contract.Assert(false);
-    }
+            //Contract.Assert(false);
+        }
 
 
     public StratifiedVC(StratifiedInliningInfo siInfo, HashSet<string> procCalls) {
@@ -376,7 +422,7 @@ namespace VC {
     public Dictionary<Block, List<CallSite>> recordProcCallSites;
     public bool initialized { get; private set; }
     // Instrumentation to apply after PassiveImpl, but before VCGen
-    Action<Implementation> PassiveImplInstrumentation;
+    public Action<Implementation> PassiveImplInstrumentation;
 
     // boolControlVC (block -> its Bool variable)
     public Dictionary<Block, VCExprVar> blockToControlVar; 
